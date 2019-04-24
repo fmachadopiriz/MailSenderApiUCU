@@ -13,14 +13,45 @@ namespace MailSenderApiUCU
     {
         private string addressFrom; // El e-mail del remitente en @gmail.com
 
-        private string nameFrom; 
+        private string nameFrom;
+      
         private string passwordFrom;
 
-        public MailSender(string addressFrom, string nameFrom, string passwordFrom)
+        public MailSender(string addressFrom, string nameFrom)
         {
             this.addressFrom = addressFrom;
             this.nameFrom = nameFrom;
-            this.passwordFrom = passwordFrom;
+        }
+
+        public void GetPassword(string prompt)
+        {
+            Console.Write(prompt);
+            this.passwordFrom = "";
+
+            do
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                // Backspace Should Not Work
+                if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                {
+                    this.passwordFrom += key.KeyChar;
+                    Console.Write("*");
+                }
+                else
+                {
+                    if (key.Key == ConsoleKey.Backspace && this.passwordFrom.Length > 0)
+                    {
+                        this.passwordFrom = this.passwordFrom.Substring(0, (this.passwordFrom.Length - 1));
+                        Console.Write("\b \b");
+                    }
+                    else if (key.Key == ConsoleKey.Enter)
+                    {
+                        break;
+                    }
+                }
+            } while (true);
+
+            Console.WriteLine();
         }
 
         public bool SendMail(string addressTo, string asunto, string contenido)
