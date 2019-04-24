@@ -6,8 +6,8 @@ namespace MailSenderApiUCU
     {
         static void Main(string[] args)
         { 
-            MailSender mailSender = new MailSender("sender@domain.com", "<pasword>");
-            bool sent = mailSender.EnviarMail("sender@domain", "<name>", "receiver@domain.com", "<Subject>", "<Body>");
+            MailSender mailSender = new MailSender("sender@gmail.com", "Nombre", "Contraseña");
+            bool sent = mailSender.SendMail("receiver@mail.com", "Asunto", "Cuerpo");
             Console.WriteLine(sent ? "Enviado." : "No enviado.");
         }
     }

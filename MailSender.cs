@@ -11,36 +11,39 @@ namespace MailSenderApiUCU
 {
     public class MailSender
     {
-        private string usrRemitente; // generalmente el e-mail del remitente
-        private string pwdRemitente;
+        private string addressFrom; // El e-mail del remitente en @gmail.com
 
-        public MailSender(string usrRemitente, string pwdRemitente)
+        private string nameFrom; 
+        private string passwordFrom;
+
+        public MailSender(string addressFrom, string nameFrom, string passwordFrom)
         {
-            this.usrRemitente = usrRemitente;
-            this.pwdRemitente = pwdRemitente;
+            this.addressFrom = addressFrom;
+            this.nameFrom = nameFrom;
+            this.passwordFrom = passwordFrom;
         }
 
-        public bool EnviarMail(string mailRemitente, string nomRemitente, string mailDestinatario, string asunto, string contenido)
+        public bool SendMail(string addressTo, string asunto, string contenido)
         {
             MailMessage msg = new MailMessage();
-            msg.To.Add(mailDestinatario);
-            msg.From = new MailAddress(mailRemitente, nomRemitente, System.Text.Encoding.UTF8);
+            msg.To.Add(addressTo);
+            msg.From = new MailAddress(this.addressFrom, this.nameFrom, System.Text.Encoding.UTF8);
             msg.Subject = asunto;
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
             msg.Body = contenido;
             msg.BodyEncoding = System.Text.Encoding.UTF8;
-
             // Si vas a enviar un correo con contenido html entonces cambia el valor a true
             msg.IsBodyHtml = false;
-            SmtpClient client = new SmtpClient();
-            client.Credentials = new System.Net.NetworkCredential(this.usrRemitente, this.pwdRemitente);
-            client.Port = 587;
 
+            SmtpClient client = new SmtpClient();
+            client.Credentials = new System.Net.NetworkCredential(this.addressFrom, this.passwordFrom);
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Port = 587;
             // Este es el smtp valido para Gmail
             client.Host = "smtp.gmail.com";
-
             // Esto es para que vaya a través de SSL que es obligatorio con GMail
             client.EnableSsl = true;
+
             try
             {
                 client.Send(msg);
